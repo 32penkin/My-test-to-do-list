@@ -23,11 +23,19 @@ inputItemText.onkeyup = function (event) {
 
 var deleteCompletedButton = document.getElementById("clear_completed");
 deleteCompletedButton.onclick = function() {
-	for(var i = 0; i < dataListAll.length; i++) {
-		if(dataListAll[i].checked){
-			dataListAll.splice(i,1);
+	//debugger;
+	
+	var filteredDtaListAll = dataListAll.filter(function (item){
+		var filteredItem;
+		if(item.checked) filteredItem = item;
+		return filteredItem;
+	});
+	for(var i = 0; i < dataListAll.length; i++){
+		for(var j = 0; j < filteredDtaListAll.length; j++){
+			if(dataListAll[i] === filteredDtaListAll[j]) dataListAll.splice(i, 1);
 		}
 	}
+	
 	render(dataListAll);
 }
 
