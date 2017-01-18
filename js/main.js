@@ -6,6 +6,7 @@ edit - doubleclick t/f
 var dataListAll  = [];
 var dataListActive = [];
 var dataListCompleted = [];
+//var currentFilter = "";
 
 var inputItemText = document.getElementById("text2");
 inputItemText.focus();
@@ -21,50 +22,16 @@ inputItemText.onkeyup = function (event) {
 	render(dataListAll);
 }
 
-var deleteCompletedButton = document.getElementById("clear_completed");
-deleteCompletedButton.onclick = function() {
-	//debugger;
-	
-	var filteredDtaListAll = dataListAll.filter(function (item){
-		var filteredItem;
-		if(item.checked) filteredItem = item;
-		return filteredItem;
-	});
-	for(var i = 0; i < dataListAll.length; i++){
-		for(var j = 0; j < filteredDtaListAll.length; j++){
-			if(dataListAll[i] === filteredDtaListAll[j]) dataListAll.splice(i, 1);
-		}
-	}
-	
+var addButton = document.getElementById("add_button");
+addButton.onclick = function() {
+	dataListAll.push({ value: inputItemText.value, checked: false, edit: false});
+	inputItemText.focus();
+	inputItemText.select();
 	render(dataListAll);
+	//renderFooter();
 }
 
-var showCompletedButton = document.getElementById("show_comleted");
-showCompletedButton.onclick = function() {
-	for(var i = 0; i < dataListAll.length; i++) {
-		if(dataListAll[i].checked){
-			dataListCompleted.push(dataListAll[i]);
-		}
-	}
-	render(dataListCompleted);
-	dataListCompleted = [];
-}
 
-var showActiveButton = document.getElementById("show_active");
-showActiveButton.onclick = function() {
-	for(var i = 0; i < dataListAll.length; i++) {
-		if(!dataListAll[i].checked){
-			dataListActive.push(dataListAll[i]);
-		}
-	}
-	render(dataListActive);
-	dataListActive = [];
-}
-
-var showAllButton = document.getElementById("show_all");
-showAllButton.onclick = function () {
-	render(dataListAll);
-}
 
 
 
@@ -73,15 +40,11 @@ function render(dl) {
 	container.innerHTML = '';
 
 
-
 	dl.forEach(function(dataItem) {
 		var itemLi = document.createElement("li");
 		itemLi.className = "view";
-		/*
-		var itemCount = document.getElementById("rem_count");
-		var totalItems = dl.length;
-		itemCount.innerHTML = "Items left: " + totalItems;
-		*/
+
+
     	if (dataItem.edit) {
       		var internalElement = document.createElement('input');
      		internalElement.type = 'text';
@@ -165,3 +128,90 @@ function render(dl) {
 		
 	});
 }
+//-------------------------------------------------------
+
+function renderFooter(currentFilter){
+	var buttonContainer = document.getElementById("footLi");
+	buttonContainer.innerHTML = "";
+//-------------------------------------------------------
+	var button1 = document.createElement("li");
+	var showAllButton = document.createElement("button");
+	showAllButton.id = "show_all";
+	showAllButton.innerText = "All";
+	showAllButton.className = currentFilter === "All" ? "filtered_button" : "";
+	showAllButton.onclick = function () {
+		render(dataListAll);
+		renderFooter("All");
+	};
+	button1.appendChild(showAllButton);
+	buttonContainer.appendChild(button1);
+//-------------------------------------------------------
+	var button2 = document.createElement("li");
+	var showActiveButton = document.createElement("button");
+	showActiveButton.id = "show_active";
+	showActiveButton.innerText = "Active";
+	showActiveButton.className = currentFilter === "Active" ? "filtered_button" : "";
+	showActiveButton.onclick = function() {
+		currentFilter = "Active";
+		for(var i = 0; i < dataListAll.length; i++) {
+			if(!dataListAll[i].checked){
+				dataListActive.push(dataListAll[i]);
+			}
+		}
+		render(dataListActive);
+		dataListActive = [];
+		renderFooter("Active");
+	};
+	button2.appendChild(showActiveButton);
+	buttonContainer.appendChild(button2);
+//-------------------------------------------------------
+	var button3 = document.createElement("li");
+	var showCompletedButton = document.createElement("button");
+	showCompletedButton.id = "show_comleted";
+	showCompletedButton.innerText = "Completed";
+	showCompletedButton.className = currentFilter === "Completed" ? "filtered_button" : "";
+	showCompletedButton.onclick = function() {
+		currentFilter = "Completed";
+		for(var i = 0; i < dataListAll.length; i++) {
+			if(dataListAll[i].checked){
+				dataListCompleted.push(dataListAll[i]);
+			}
+		}
+		render(dataListCompleted);
+		dataListCompleted = [];
+		renderFooter("Completed");
+	};
+	button3.appendChild(showCompletedButton);
+	buttonContainer.appendChild(button3);
+//-------------------------------------------------------
+	var button4 = document.createElement("li");
+	var deleteCompletedButton = document.createElement("button");
+	deleteCompletedButton.id = "clear_completed";
+	deleteCompletedButton.innerText = "Clear completed";
+	deleteCompletedButton.onclick = function() {
+		var filteredDtaListAll = dataListAll.filter(function (item){
+			var filteredItem;
+			if(item.checked) filteredItem = item;
+			return filteredItem;
+		});
+		for(var i = 0; i < dataListAll.length; i++){
+			for(var j = 0; j < filteredDtaListAll.length; j++){
+				if(dataListAll[i] === filteredDtaListAll[j]) dataListAll.splice(i, 1);
+			}
+		}
+	
+		render(dataListAll);
+	};
+	button4.appendChild(deleteCompletedButton);
+	buttonContainer.appendChild(button4);
+}
+
+renderFooter("");
+
+/*
+в листе в твоем добавь вот что
+1 - при добавлении туду очищать поле
+2 - кнопку добавления (шо б была)
+3 - фильтры внизу - надо текущий выделять, чтобы понятно было на каком ты
+4 - clear completed удаляет только один, а надо чтобы все завершенные
+*/

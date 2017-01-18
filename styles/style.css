@@ -57,6 +57,12 @@ header input::input-placeholder:focus {
 	margin-top: 10px;
 }
 
+.addButton {
+	height: 29.33px;
+	width: 29.33px;
+	margin-left: 7px;
+}
+
 
 /*---------------------------------TODO LIST SECTION------------------------*/
 .main {
@@ -189,6 +195,10 @@ float:left;
 margin:0 10px;
 }
 
+.filtered_button {
+	border: 1.5px solid #5b3416;
+}
+
 .last_foot {
 	
 	text-align: center;
@@ -200,3 +210,4 @@ margin:0 10px;
 .last_foot p {
 	font-color: #50627f;
 }
+
