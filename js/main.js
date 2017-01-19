@@ -1,12 +1,7 @@
-/*
-value - span
-checked - button t/f
-edit - doubleclick t/f
-*/
+
 var dataListAll  = [];
 var dataListActive = [];
 var dataListCompleted = [];
-//var currentFilter = "";
 
 var inputItemText = document.getElementById("text2");
 inputItemText.focus();
@@ -28,9 +23,7 @@ addButton.onclick = function() {
 	inputItemText.focus();
 	inputItemText.select();
 	render(dataListAll);
-	//renderFooter();
 }
-
 
 
 
@@ -125,8 +118,9 @@ function render(dl) {
    		itemLi.appendChild(internalElement);
    		itemLi.appendChild(tBar);
 		container.appendChild(itemLi);
-		
 	});
+	if(dl.length == 0) document.getElementById("empty_message").style.display = "block";
+	else document.getElementById("empty_message").style.display = "none";
 }
 //-------------------------------------------------------
 
@@ -208,10 +202,3 @@ function renderFooter(currentFilter){
 
 renderFooter("");
 
-/*
-в листе в твоем добавь вот что
-1 - при добавлении туду очищать поле
-2 - кнопку добавления (шо б была)
-3 - фильтры внизу - надо текущий выделять, чтобы понятно было на каком ты
-4 - clear completed удаляет только один, а надо чтобы все завершенные
-*/
